@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+
+    api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: habib/php
+        container_name: api
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+            - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - app-network
+
+    nginx:
+        image: nginx:alpine
+        container_name: nginx
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "${APP_PORT:-85}:80"
+        volumes:
+            - ./:/var/www
+            - ./devops/nginx/:/etc/nginx/conf.d/
+        depends_on:
+            - api
+        networks:
+            - app-network
+
+    mysql:
+        image: mysql:5.7.22
+        container_name: mysql
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "${DB_PORT:-3306}:3306"
+        environment:
+            MYSQL_DATABASE: laravel
+            MYSQL_ROOT_PASSWORD: password
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - dbdata:/var/lib/mysql/
+        networks:
+            - app-network
+
+    redis:
+        container_name: redis
+        image: 'redis:6-alpine'
+        restart: always
+        command: redis-server
+        ports:
+            - '6379:6379'
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
+
+volumes:
+    dbdata:
+        driver: local
