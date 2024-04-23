@@ -14,4 +14,9 @@ class BatchFileStatus extends Model
         'display_name',
         'name',
     ];
+
+    protected $hidden = [
+        'updated_at',
+        'deleted_at',
+    ];
 }
