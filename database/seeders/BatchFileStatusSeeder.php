@@ -21,6 +21,10 @@ class BatchFileStatusSeeder extends Seeder
     {
         return [
             [
+                'display_name' => 'Em Progresso',
+                'name' => 'progress',
+            ],
+            [
                 'display_name' => 'Concluído',
                 'name' => 'done',
             ],
