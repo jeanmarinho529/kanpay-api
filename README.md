@@ -79,3 +79,24 @@ File Processing:
 In this application, it's already possible to import billing files. However, it allows us to process files with different contents. To achieve this, we need to create a new `BatchFileType`, listen to the `BatchFileUploaded` event, create the corresponding model, and create the `FormRequest` for its spreadsheet (although the `FormRequest` is optional, it's recommended).
 
 Once the data has been persisted, we can use it in any way we want.
+
+
+### Useful environments
+
+```dotenv
+# Determine the port on which the application will run
+APP_PORT=85
+
+# Disable or enable the telescope in the development environment
+TELESCOPE_ENABLED=false
+
+# Define the chunk size of the file content
+BATCH_FILE_CHUNK_SIZE=1000
+```
+
+If you change any environment variable, I recommend restarting the application.
+
+Restart:
+```sh
+$ docker-compose restart
+```

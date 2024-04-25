@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class BatchFileItemService extends BatchFileItemErrorService
 {
-    protected const CHUNK_SIZE = 1000;
-
     protected string $modelClass;
 
     protected mixed $validatorClass;
@@ -135,7 +133,7 @@ class BatchFileItemService extends BatchFileItemErrorService
                 $chunkSize++;
                 $rowNumber++;
 
-                if ($chunkSize >= self::CHUNK_SIZE) {
+                if ($chunkSize >= (int) env('BATCH_FILE_CHUNK_SIZE', 1000)) {
                     yield $chunkData;
                     $chunkData = [];
                     $chunkSize = 0;
