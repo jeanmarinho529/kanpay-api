@@ -22,6 +22,8 @@ RUN docker-php-ext-install gd pdo_mysql exif pcntl
 
 RUN pecl install redis && docker-php-ext-enable redis
 
+ADD ./devops/php.ini /usr/local/etc/php/
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN groupadd -g 1000 www
