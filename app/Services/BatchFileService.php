@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\BatchFileStatusEnum;
 use App\Events\BatchFileUploaded;
 use App\Models\BatchFile\BatchFile;
+use App\Models\BatchFile\BatchFileItemError;
 use App\Models\BatchFile\BatchFileStatus;
 use App\Models\BatchFile\BatchFileType;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -22,6 +23,13 @@ class BatchFileService
     public function show(string $id): BatchFile|Model|Collection|static
     {
         return BatchFile::with(['batchFileStatus', 'batchFileType'])->findOrFail($id);
+    }
+
+    public function errors(string $id, array $data): BatchFile|Paginator
+    {
+        $file = $this->show($id);
+
+        return BatchFileItemError::where('batch_file_id', $file->id)->simplePaginate($data['per_page'] ?? 10);
     }
 
     public function uploadFile(object $file, array $data): BatchFile
