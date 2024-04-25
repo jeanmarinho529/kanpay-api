@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BatchFileRequest;
 use App\Http\Requests\PaginateRequest;
-use App\Models\BatchFile\BatchFile;
 use App\Services\BatchFileService;
 use Illuminate\Support\Facades\Response;
 
@@ -24,7 +23,7 @@ class BatchFIleController extends Controller
 
     public function show(string $id)
     {
-        return Response::api(BatchFile::with(['batchFileStatus', 'batchFileType'])->findOrFail($id));
+        return Response::api($this->service->show($id));
     }
 
     public function store(BatchFileRequest $request)
