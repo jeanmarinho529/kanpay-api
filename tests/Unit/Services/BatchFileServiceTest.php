@@ -17,6 +17,8 @@ use Tests\TestCase;
 
 class BatchFileServiceTest extends TestCase
 {
+    //todo: create errors method test
+
     use RefreshDatabase;
 
     private BatchFileService $service;

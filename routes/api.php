@@ -24,5 +24,6 @@ Route::prefix('/v1')->group(function () {
     Route::get('batch-files', [BatchFIleController::class, 'index']);
     Route::get('batch-files/{id}', [BatchFIleController::class, 'show']);
     Route::post('batch-files', [BatchFIleController::class, 'store']);
+    Route::get('batch-files/{id}/errors', [BatchFIleController::class, 'errors']);
 
 });

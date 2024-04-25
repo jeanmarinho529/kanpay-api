@@ -6,6 +6,7 @@ use App\Http\Requests\BatchFileRequest;
 use App\Http\Requests\PaginateRequest;
 use App\Services\BatchFileService;
 use Illuminate\Support\Facades\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponseAlias;
 
 class BatchFIleController extends Controller
 {
@@ -28,6 +29,14 @@ class BatchFIleController extends Controller
 
     public function store(BatchFileRequest $request)
     {
-        return Response::api($this->service->uploadFile($request->file('file'), $request->all()));
+        return Response::api(
+            $this->service->uploadFile($request->file('file'), $request->all()),
+            HttpResponseAlias::HTTP_CREATED
+        );
+    }
+
+    public function errors(string $id, PaginateRequest $request)
+    {
+        return Response::api($this->service->errors($id, $request->all()));
     }
 }
