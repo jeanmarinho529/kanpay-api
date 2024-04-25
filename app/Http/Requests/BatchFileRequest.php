@@ -14,7 +14,7 @@ class BatchFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:csv',
+            'file' => 'required|file|mimes:csv|max:150000',
             'file_type_name' => 'required|string|max:50|exists:batch_file_types,name',
         ];
     }
