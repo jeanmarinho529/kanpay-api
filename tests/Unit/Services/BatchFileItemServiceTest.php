@@ -10,6 +10,7 @@ use App\Models\Billing;
 use App\Services\BatchFileItemService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class BatchFileItemServiceTest extends TestCase
@@ -124,6 +125,8 @@ class BatchFileItemServiceTest extends TestCase
 
         $file = BatchFile::factory()->create(['path' => 'batch_file/test/test.csv']);
 
+        $this->createCsvTest();
+
         $expected = [
             [
                 'id' => '1',
@@ -148,5 +151,32 @@ class BatchFileItemServiceTest extends TestCase
         foreach ($chunks as $chunk) {
             $this->assertEquals($expected, $chunk);
         }
+    }
+
+    private function createCsvTest(): void
+    {
+        $data = [
+            ['id' => 1, 'name' => 'kobe'],
+            ['id' => 2, 'name' => 'oscar'],
+        ];
+
+        Storage::disk('local')->put('batch_file/test/test.csv', $this->arrayToCsv($data));
+    }
+
+    private function arrayToCsv(array $array): string
+    {
+        $output = fopen('php://temp', 'w');
+
+        fputcsv($output, array_keys($array[0]));
+
+        foreach ($array as $row) {
+            fputcsv($output, $row);
+        }
+
+        rewind($output);
+        $csv = stream_get_contents($output);
+        fclose($output);
+
+        return $csv;
     }
 }
