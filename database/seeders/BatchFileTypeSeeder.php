@@ -22,7 +22,7 @@ class BatchFileTypeSeeder extends Seeder
         return [
             [
                 'display_name' => 'Cobranças',
-                'name' => 'charge',
+                'name' => 'billing',
             ],
         ];
     }
