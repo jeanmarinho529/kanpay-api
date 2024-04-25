@@ -15,7 +15,7 @@ class PaginateRequest extends FormRequest
     {
         return [
             'page' => 'nullable|integer',
-            'items' => 'nullable|integer',
+            'per_page' => 'nullable|integer',
         ];
     }
 }

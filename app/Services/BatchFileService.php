@@ -16,7 +16,7 @@ class BatchFileService
 {
     public function index(array $data): BatchFile|Paginator
     {
-        return BatchFile::with(['batchFileStatus', 'batchFileType'])->simplePaginate($data['items'] ?? 10);
+        return BatchFile::with(['batchFileStatus', 'batchFileType'])->simplePaginate($data['per_page'] ?? 10);
     }
 
     public function show(string $id): BatchFile|Model|Collection|static
@@ -30,7 +30,7 @@ class BatchFileService
             $type = BatchFileType::where('name', $data['file_type_name'])->first();
 
             $filePath = $file->store('batch_file/'.$type->name);
-            $status = BatchFileStatus::where('name', BatchFileStatusEnum::PROGRESS->value)->first();
+            $status = BatchFileStatus::where('name', BatchFileStatusEnum::PROGRESS->value)->firstOrFail();
 
         } catch (\Exception $exception) {
             Log::error($exception);
