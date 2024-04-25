@@ -62,7 +62,7 @@ class BatchFileItemErrorServiceTest extends TestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function test_ola()
+    public function test_should_process_and_validate_errors(): void
     {
         $file = BatchFile::factory()->create();
 
