@@ -5,6 +5,7 @@ namespace App\Models\BatchFile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BatchFile extends Model
@@ -34,5 +35,10 @@ class BatchFile extends Model
     public function batchFileType(): BelongsTo
     {
         return $this->belongsTo(BatchFileType::class);
+    }
+
+    public function batchFileItemError(): HasMany
+    {
+        return $this->hasMany(BatchFileItemError::class);
     }
 }

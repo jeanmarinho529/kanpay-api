@@ -11,15 +11,16 @@ use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 
-class BatchFileItemService
+class BatchFileItemService extends BatchFileItemErrorService
 {
     protected const CHUNK_SIZE = 1000;
 
     protected string $modelClass;
 
-    public function __construct(string $modelClass)
+    public function __construct(string $modelClass, ?string $validatorClass = null)
     {
         $this->modelClass = $modelClass;
+        parent::__construct($validatorClass);
     }
 
     public function processItems(BatchFile $file): BatchFile
