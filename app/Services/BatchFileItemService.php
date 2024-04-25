@@ -17,9 +17,12 @@ class BatchFileItemService extends BatchFileItemErrorService
 
     protected string $modelClass;
 
+    protected mixed $validatorClass;
+
     public function __construct(string $modelClass, ?string $validatorClass = null)
     {
         $this->modelClass = $modelClass;
+        $this->validatorClass = $validatorClass;
         parent::__construct($validatorClass);
     }
 
@@ -30,7 +33,7 @@ class BatchFileItemService extends BatchFileItemErrorService
 
             $count = 0;
             foreach ($this->chunkFile($file) as $chunk) {
-                $batch->add(new BatchFilePersistItemsJob($this->modelClass, $chunk, $file));
+                $batch->add(new BatchFilePersistItemsJob($this->modelClass, $chunk, $file, $this->validatorClass));
 
                 if ($count >= 10) {
                     $batch->finally(function (Batch $batch) use ($file) {
@@ -74,7 +77,8 @@ class BatchFileItemService extends BatchFileItemErrorService
 
     public function updateBatchFile(BatchFile $file, bool $updateStatus = true): BatchFile
     {
-        $totalItemsDone = $file->charges()->count();
+        $processedItems = new $this->modelClass();
+        $totalItemsDone = $processedItems->where('batch_file_id', $file->id)->count();
         $totalItemsError = $file->batchFileItemError()->count();
 
         if ($updateStatus) {
@@ -139,7 +143,6 @@ class BatchFileItemService extends BatchFileItemErrorService
             }
 
             if (! empty($chunkData)) {
-                info(count($chunkData));
                 yield $chunkData;
             }
             fclose($handle);

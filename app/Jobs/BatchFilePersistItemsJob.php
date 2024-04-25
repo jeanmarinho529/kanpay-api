@@ -17,20 +17,23 @@ class BatchFilePersistItemsJob implements ShouldQueue
 
     private string $modelClass;
 
+    private ?string $validatorClass;
+
     private array $data;
 
     private BatchFile $file;
 
-    public function __construct(string $modelClass, array $data, BatchFile $file)
+    public function __construct(string $modelClass, array $data, BatchFile $file, ?string $validatorClass = null)
     {
         $this->modelClass = $modelClass;
+        $this->validatorClass = $validatorClass;
         $this->data = $data;
         $this->file = $file;
     }
 
     public function handle(): void
     {
-        $validate = (new BatchFileItemErrorService())->validate($this->data, $this->file);
+        $validate = (new BatchFileItemErrorService($this->validatorClass))->validate($this->data, $this->file);
         (new $this->modelClass())->insert($validate);
     }
 }

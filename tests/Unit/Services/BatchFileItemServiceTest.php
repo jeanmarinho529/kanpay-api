@@ -6,6 +6,7 @@ use App\Enums\BatchFileStatusEnum;
 use App\Models\BatchFile\BatchFile;
 use App\Models\BatchFile\BatchFileItemError;
 use App\Models\BatchFile\BatchFileStatus;
+use App\Models\Billing;
 use App\Services\BatchFileItemService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
@@ -21,7 +22,7 @@ class BatchFileItemServiceTest extends TestCase
 
     public function __construct(string $name)
     {
-        $this->service = new BatchFileItemService(BatchFile::class, null);
+        $this->service = new BatchFileItemService(Billing::class);
         parent::__construct($name);
     }
 
@@ -64,7 +65,7 @@ class BatchFileItemServiceTest extends TestCase
 
         $serviceMock = $this->getMockBuilder(BatchFileItemService::class)
             ->onlyMethods(['getStatus'])
-            ->disableOriginalConstructor()
+            ->setConstructorArgs([Billing::class])
             ->getMock();
 
         $serviceMock->method('getStatus')->willReturn($status);
